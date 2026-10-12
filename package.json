@@ -1,0 +1,10 @@
+{
+  "name": "mikrotik-mpesa-redis-hotspot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@upstash/redis": "^1.35.0"
+  }
+}

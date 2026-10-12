@@ -1,0 +1,14 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wi-Fi Login</title></head>
+<body>
+<p>Redirecting to the M-Pesa payment page…</p>
+<script>
+const base = "https://YOUR-PROJECT.vercel.app/";
+const p = new URLSearchParams();
+p.set("mac", "$(mac)");
+p.set("ip", "$(ip)");
+p.set("loginUrl", "$(link-login-only)");
+location.replace(base + "?" + p.toString());
+</script>
+<noscript>Enable JavaScript to open the M-Pesa payment page.</noscript>
+</body></html>
