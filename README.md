@@ -16,7 +16,7 @@ Create a Redis database in Upstash and copy its HTTPS REST URL and token. This i
 1. Upload these files to a GitHub repository or deploy using the Vercel CLI.
 2. Import the repository into Vercel.
 3. Add every variable from `.env.example` in Project Settings > Environment Variables.
-4. Set `DARAJA_CALLBACK_URL` to `https://YOUR-PROJECT.vercel.app/api/callback`.
+4. Set `DARAJA_CALLBACK_URL` to `hotspot-backend-hkrzld32u-nextedge.vercel.app/api/callback`.
 5. Keep `DARAJA_BASE_URL=https://sandbox.safaricom.co.ke` until sandbox tests pass.
 6. Redeploy after adding/changing environment variables.
 
@@ -31,7 +31,7 @@ Vercel automatically deploys Node.js functions in `api/`. The frontend is `index
 6. Restrict RouterOS administration to LAN only. Never publish Winbox, SSH, API, or WebFig to the internet.
 
 ## 4. Hotspot portal integration
-Upload `hotspot-login.html` as the hotspot login page or merge its form/redirect logic into your existing login page. Replace `https://YOUR-PROJECT.vercel.app` with your deployed domain.
+Upload `hotspot-login.html` as the hotspot login page or merge its form/redirect logic into your existing login page. Replace `hotspot-backend-hkrzld32u-nextedge.vercel.app` with your deployed domain.
 The browser must supply `mac`, `ip`, and `loginUrl` from MikroTik's hotspot page variables. The router independently checks that the IP/MAC pair appears in `/ip hotspot host` before creating an account. These values are still not a cryptographic proof of identity; keep the hotspot network isolated and use RouterOS firewalling.
 
 ## 5. Test procedure

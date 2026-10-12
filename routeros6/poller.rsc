@@ -2,7 +2,7 @@
 # Set Vercel URL, router ID and token to match Vercel environment variables.
 # Assumes hotspot clients use 192.168.100.0/24. Test on exact ROS 6 minor version.
 
-:global mpesaBaseUrl "https://YOUR-PROJECT.vercel.app"
+:global mpesaBaseUrl "hotspot-backend-hkrzld32u-nextedge.vercel.app"
 :global mpesaRouterId "haplite01"
 :global mpesaRouterToken "REPLACE_WITH_THE_SAME_LONG_RANDOM_ROUTER_TOKEN"
 
