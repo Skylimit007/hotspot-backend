@@ -4,7 +4,7 @@
 
 :global mpesaBaseUrl "hotspot-backend-hkrzld32u-nextedge.vercel.app"
 :global mpesaRouterId "haplite01"
-:global mpesaRouterToken itM12EBr4Vgo9tlg1cixc7LW2Mq1H4CzDF7Hk2tC4CWsBp9IDHAYTlo1ScY0Rsfu"
+:global mpesaRouterToken "itM12EBr4Vgo9tlg1cixc7LW2Mq1H4CzDF7Hk2tC4CWsBp9IDHAYTlo1ScY0Rsfu"
 
 :local nextUrl ($mpesaBaseUrl . "/api/router-next?routerId=" . $mpesaRouterId)
 :local fetchResult
