@@ -46,7 +46,7 @@ export function validPrivateIp(value) {
   const n = m.slice(1).map(Number);
   if (n.some(x => x < 0 || x > 255)) return false;
   // Adjust this to your actual hotspot subnet if different.
-  return n[0] === 192 && n[1] === 168 && n[2] === 100 && n[3] > 0 && n[3] < 255;
+  return n[0] === 192 && n[1] === 168 && n[2] === 89 && n[3] > 0 && n[3] < 255;
 }
 
 export function secureEqual(a, b) {
