@@ -1,8 +1,8 @@
 # REVIEW AND EDIT BEFORE USE. RouterOS 6 script for a single hAP lite.
 # Set Vercel URL, router ID and token to match Vercel environment variables.
-# Assumes hotspot clients use 192.168.100.0/24. Test on exact ROS 6 minor version.
+# Assumes hotspot clients use 192.168.89.0/24. Test on exact ROS 6 minor version.
 
-:global mpesaBaseUrl "hotspot-backend-hkrzld32u-nextedge.vercel.app"
+:global mpesaBaseUrl "https://hotspot-backend-ebon.vercel.app"
 :global mpesaRouterId "haplite01"
 :global mpesaRouterToken "itM12EBr4Vgo9tlg1cixc7LW2Mq1H4CzDF7Hk2tC4CWsBp9IDHAYTlo1ScY0Rsfu"
 
@@ -36,7 +36,7 @@
 :if ([:len $password] < 8 || [:len $password] > 20) do={ :log error "Invalid M-Pesa password"; :return }
 :if (($uptime != "1h") && ($uptime != "5h") && ($uptime != "1d")) do={ :log error "Invalid M-Pesa uptime"; :return }
 :if ([:len $mac] != 17) do={ :log error "Invalid M-Pesa MAC"; :return }
-:if ([:pick $ip 0 12] != "192.168.100.") do={ :log error "Invalid M-Pesa client IP"; :return }
+:if ([:pick $ip 0 12] != "192.168.89.") do={ :log error "Invalid M-Pesa client IP"; :return }
 
 # Confirm the supplied IP/MAC pair is visible to the hotspot router.
 :local hostId [/ip hotspot host find where address=$ip and mac-address=$mac]
