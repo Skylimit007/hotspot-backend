@@ -4,7 +4,19 @@ import {
   validMac, validPrivateIp, randomText, darajaAccessToken, stkPassword, timestampKE
 } from "./_lib.js";
 
+function setCors(res) {
+  // The login page is hosted by MikroTik while this API is hosted by Vercel.
+  // No cookies or browser credentials are used by this endpoint.
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Max-Age", "600");
+  res.setHeader("Vary", "Origin");
+}
+
 export default async function handler(req, res) {
+  setCors(res);
+  if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return json(res, 405, { error: "Method not allowed" });
 
   try {
@@ -13,14 +25,16 @@ export default async function handler(req, res) {
     const pkg = PACKAGES[String(body.packageId || "")];
     const mac = String(body.mac || "").toLowerCase();
     const ip = String(body.ip || "");
+
     if (!phone || !pkg || !validMac(mac) || !validPrivateIp(ip)) {
       return json(res, 400, { error: "Invalid phone, package, or hotspot client details." });
     }
 
-    // Simple per-phone throttle. Do not rely on this alone in production.
     const throttleKey = `throttle:${phone}`;
     const allowed = await redis.set(throttleKey, "1", { nx: true, ex: 30 });
-    if (allowed !== "OK") return json(res, 429, { error: "Please wait 30 seconds before requesting another STK Push." });
+    if (allowed !== "OK") {
+      return json(res, 429, { error: "Please wait 30 seconds before requesting another STK Push." });
+    }
 
     const requestId = crypto.randomUUID();
     const statusToken = randomText(48);
@@ -78,6 +92,7 @@ export default async function handler(req, res) {
       status: "pending",
       createdAt: Date.now()
     };
+
     await redis.set(`payment:${result.CheckoutRequestID}`, payment, { ex: TTL_SECONDS });
     return json(res, 200, {
       ok: true,

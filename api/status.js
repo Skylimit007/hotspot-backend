@@ -1,23 +1,48 @@
 import crypto from "node:crypto";
 import { redis, json, getBody, secureEqual } from "./_lib.js";
 
+function setCors(res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Max-Age", "600");
+  res.setHeader("Vary", "Origin");
+}
+
 export default async function handler(req, res) {
+  setCors(res);
+  if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return json(res, 405, { error: "Method not allowed" });
+
   try {
     const body = getBody(req);
     const checkoutId = String(body.checkoutRequestId || "");
     const statusToken = String(body.statusToken || "");
-    if (!checkoutId || statusToken.length < 32) return json(res, 400, { error: "Invalid status request." });
+    if (!checkoutId || statusToken.length < 32) {
+      return json(res, 400, { error: "Invalid status request." });
+    }
 
     const payment = await redis.get(`payment:${checkoutId}`);
-    if (!payment) return json(res, 404, { status: "expired", message: "Payment session expired. If you paid, contact the hotspot operator with your M-Pesa receipt." });
+    if (!payment) {
+      return json(res, 404, {
+        status: "expired",
+        message: "Payment session expired. If you paid, contact the hotspot operator with your M-Pesa receipt."
+      });
+    }
 
     const hash = crypto.createHash("sha256").update(statusToken).digest("hex");
-    if (!secureEqual(hash, payment.statusTokenHash)) return json(res, 403, { error: "Invalid status token." });
+    if (!secureEqual(hash, payment.statusTokenHash)) {
+      return json(res, 403, { error: "Invalid status token." });
+    }
 
     if (payment.status === "ready") {
-      return json(res, 200, { status: "ready", username: payment.username, password: payment.password });
+      return json(res, 200, {
+        status: "ready",
+        username: payment.username,
+        password: payment.password
+      });
     }
+
     return json(res, 200, {
       status: payment.status,
       message: payment.status === "pending" ? "Waiting for Safaricom payment confirmation." :
